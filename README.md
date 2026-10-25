@@ -13,6 +13,13 @@ execution boundary remains protected even when called outside the agent graph.
 
 ![chat-image](./chat-image.png)
 
+## GitHub profile explorer
+
+This repository also includes a standalone GitHub profile explorer in
+[`github-explorer/`](github-explorer/README.md). It is a dependency-free browser
+app for browsing public profiles, repositories, README files, and recent public
+activity. See its README for local run instructions and API limitations.
+
 ## Architecture
 
 | Concept | Implementation |

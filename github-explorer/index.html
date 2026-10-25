@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0b0e14" />
+    <meta name="description" content="Explore public GitHub profiles, repositories, and recent activity." />
+    <title>GitScope — GitHub profile explorer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="GitScope home">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M12 2.75 20 7.2v9.6l-8 4.45-8-4.45V7.2l8-4.45Z" stroke="currentColor" stroke-width="1.6"/><path d="m8 12 2.3 2.3L16.5 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <span>git<span class="brand-accent">scope</span></span>
+        <span class="beta-tag">PROFILE EXPLORER</span>
+      </a>
+      <div class="topbar-actions">
+        <a class="github-link" href="https://github.com" target="_blank" rel="noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+        <button id="themeToggle" class="icon-button" type="button" aria-label="Switch to light theme" title="Toggle theme">
+          <svg class="sun-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <main id="main" class="page-shell">
+      <section class="hero" aria-labelledby="heroTitle">
+        <div class="hero-copy">
+          <div class="eyebrow"><span class="live-dot"></span> PUBLIC GITHUB DATA · LIVE</div>
+          <h1 id="heroTitle">A closer look at<br /><span>the people behind the code.</span></h1>
+          <p>Search a GitHub username to explore their work, momentum, and community footprint.</p>
+        </div>
+        <form id="searchForm" class="search-form" role="search" autocomplete="off">
+          <label class="sr-only" for="usernameInput">GitHub username</label>
+          <span class="search-at" aria-hidden="true">@</span>
+          <input id="usernameInput" name="user" type="search" placeholder="Search a GitHub username…" spellcheck="false" autocapitalize="off" autocomplete="off" aria-describedby="searchHint" />
+          <kbd class="search-shortcut" aria-hidden="true">↵</kbd>
+          <button class="search-button" type="submit"><span>Explore profile</span><span aria-hidden="true">→</span></button>
+        </form>
+        <div id="searchHint" class="search-hint">Try <button type="button" class="text-button" data-user="torvalds">@torvalds</button>, <button type="button" class="text-button" data-user="sindresorhus">@sindresorhus</button> or <button type="button" class="text-button" data-user="yyx990803">@yyx990803</button></div>
+      </section>
+
+      <section id="statusRegion" class="status-region" aria-live="polite" aria-atomic="true"></section>
+
+      <section id="welcomePanel" class="welcome-panel" aria-labelledby="welcomeTitle">
+        <div class="welcome-head">
+          <div><div class="section-kicker">START EXPLORING</div><h2 id="welcomeTitle">Find your next rabbit hole.</h2></div>
+          <p>Quick picks, recent searches, and a few profiles worth knowing.</p>
+        </div>
+        <div class="explore-grid">
+          <div class="explore-block"><h3>Notable profiles</h3><div class="profile-picks">
+            <button class="profile-pick" data-user="torvalds"><span class="pick-avatar">L</span><span><strong>Linus Torvalds</strong><small>Linux · Git</small></span><span class="pick-arrow">↗</span></button>
+            <button class="profile-pick" data-user="sindresorhus"><span class="pick-avatar">S</span><span><strong>Sindre Sorhus</strong><small>Open-source prolific</small></span><span class="pick-arrow">↗</span></button>
+            <button class="profile-pick" data-user="yyx990803"><span class="pick-avatar">E</span><span><strong>Evan You</strong><small>Vue · Vite</small></span><span class="pick-arrow">↗</span></button>
+            <button class="profile-pick" data-user="addyosmani"><span class="pick-avatar">A</span><span><strong>Addy Osmani</strong><small>Web performance</small></span><span class="pick-arrow">↗</span></button>
+          </div></div>
+          <div class="explore-block recent-block"><div class="recent-heading"><h3>Recent searches</h3><button id="clearHistory" class="text-button subtle" type="button" hidden>Clear</button></div><div id="recentSearches" class="recent-searches"><p class="muted small">Profiles you visit will show up here.</p></div>
+            <div class="api-note"><span class="api-note-icon">⌘</span><span><strong>Public API, no account needed</strong><small>Anonymous requests are rate-limited. Add a token only if you hit the limit.</small></span></div>
+          </div>
+        </div>
+      </section>
+
+      <div id="dashboard" class="dashboard" hidden>
+        <div id="loadingPanel" class="loading-panel" hidden></div>
+        <div id="dashboardContent">
+        <section id="profileCard" class="profile-card panel" aria-label="GitHub profile"></section>
+        <section class="stats-grid" id="statsGrid" aria-label="Repository statistics"></section>
+        <section class="analytics-grid" aria-label="Visual analytics">
+          <article class="panel chart-panel language-panel"><div class="panel-heading"><div><div class="section-kicker">CODE DNA</div><h2>Language mix</h2></div><span class="panel-meta">By repository</span></div><div id="languageChart" class="language-chart"></div></article>
+          <article class="panel chart-panel stars-panel"><div class="panel-heading"><div><div class="section-kicker">TOP PERFORMERS</div><h2>Most-starred repos</h2></div><span class="panel-meta">Top 6</span></div><div id="starsChart" class="stars-chart"></div></article>
+          <article class="panel heatmap-panel"><div class="panel-heading"><div><div class="section-kicker">OPEN SOURCE PULSE</div><h2>Recent public activity</h2></div><span class="panel-meta">~90 days · API events</span></div><div id="heatmap" class="heatmap-wrap"></div><p class="chart-footnote">Based on public events returned by GitHub. This is an estimate, not the private contribution graph.</p></article>
+        </section>
+
+        <section class="content-grid">
+          <section class="panel repo-panel" aria-labelledby="repoTitle">
+            <div class="panel-heading repo-heading"><div><div class="section-kicker">THE WORK</div><h2 id="repoTitle">Repositories <span id="repoCount" class="count-pill">0</span></h2></div><button id="repoReset" class="text-button subtle" type="button">Reset filters</button></div>
+            <div class="repo-controls">
+              <label class="repo-search"><span aria-hidden="true">⌕</span><span class="sr-only">Search repositories</span><input id="repoSearch" type="search" placeholder="Filter repositories…" /></label>
+              <label class="select-wrap"><span class="sr-only">Filter by language</span><select id="languageFilter"><option value="">All languages</option></select></label>
+              <label class="select-wrap"><span class="sr-only">Sort repositories</span><select id="repoSort"><option value="stars">Most stars</option><option value="updated">Recently updated</option><option value="name">Name A–Z</option></select></label>
+            </div>
+            <div id="repoList" class="repo-list"></div>
+            <div id="repoEmpty" class="empty-filter" hidden>No repositories match those filters. Try a different search.</div>
+          </section>
+          <aside class="panel activity-panel" aria-labelledby="activityTitle">
+            <div class="panel-heading"><div><div class="section-kicker">WHAT'S HAPPENING</div><h2 id="activityTitle">Recent activity</h2></div><span id="activityCount" class="panel-meta"></span></div>
+            <div id="activityList" class="activity-list"></div>
+          </aside>
+        </section>
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer"><span>Built for curiosity <span class="footer-heart">✳</span></span><span>Data from the <a href="https://docs.github.com/en/rest" target="_blank" rel="noreferrer">GitHub REST API</a></span></footer>
+
+    <div id="tokenPanel" class="token-backdrop" hidden>
+      <section class="token-card panel" role="dialog" aria-modal="true" aria-labelledby="tokenTitle">
+        <button id="closeToken" class="dialog-close icon-button" type="button" aria-label="Close token dialog">×</button>
+        <div class="section-kicker">RATE LIMIT REACHED</div><h2 id="tokenTitle">Keep exploring with a token.</h2>
+        <p>GitHub allows more requests with a personal access token. It stays in this browser and is only sent to api.github.com.</p>
+        <form id="tokenForm"><label for="tokenInput">Personal access token</label><input id="tokenInput" type="password" autocomplete="off" placeholder="github_pat_…" required /><div class="token-actions"><button id="removeToken" class="text-button subtle" type="button">Remove saved token</button><button class="search-button" type="submit">Save & retry <span aria-hidden="true">→</span></button></div></form>
+        <a class="token-help" href="https://github.com/settings/tokens/new?scopes=&description=GitScope%20Public%20Explorer" target="_blank" rel="noreferrer">Create a token for public read access ↗</a>
+      </section>
+    </div>
+
+    <dialog id="repoDialog" class="repo-dialog" aria-labelledby="dialogTitle">
+      <div class="dialog-top"><div class="dialog-title-wrap"><span id="dialogOwner" class="dialog-owner"></span><h2 id="dialogTitle"></h2></div><button id="closeRepoDialog" class="icon-button dialog-close" type="button" aria-label="Close repository details">×</button></div>
+      <div class="dialog-meta" id="dialogMeta"></div><div class="dialog-topics" id="dialogTopics"></div>
+      <div class="readme-heading"><span class="section-kicker">PROJECT README</span><a id="readmeSource" href="#" target="_blank" rel="noreferrer">View on GitHub ↗</a></div>
+      <article id="readmeContent" class="readme-content"></article>
+    </dialog>
+    <script src="app.js" defer></script>
+  </body>
+</html>
