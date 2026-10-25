@@ -1,0 +1,29 @@
+button[type="submit"] {
+  background: hsl(156 72% 42%) !important;
+  border-color: hsl(156 72% 42%) !important;
+  color: white !important;
+  transition: background-color 160ms ease, transform 160ms ease;
+}
+
+button[type="submit"]:hover {
+  background: hsl(156 72% 34%) !important;
+  border-color: hsl(156 72% 34%) !important;
+  transform: translateY(-1px);
+}
+
+button:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid hsl(156 72% 42%) !important;
+  outline-offset: 2px;
+}
+
+pre, code {
+  border-radius: 0.6rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
